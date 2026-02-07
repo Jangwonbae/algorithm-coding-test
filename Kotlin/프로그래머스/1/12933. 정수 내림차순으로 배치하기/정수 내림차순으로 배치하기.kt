@@ -1,0 +1,3 @@
+class Solution {
+    fun solution(n: Long): Long = n.toString().toCharArray().sortedArrayDescending().joinToString("").toLong()
+}
