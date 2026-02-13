@@ -8,5 +8,5 @@ class Solution {
             }
         }
         return sorted.size
-    }
+    }//6 5 3 1 0
 }
