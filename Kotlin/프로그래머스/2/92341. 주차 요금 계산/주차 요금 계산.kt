@@ -18,21 +18,17 @@ class Solution {
             var totalTime = 0
             answer+=0
             record.forEachIndexed{ index, v->
-                when(index%2) {
-                    //입차
-                    0 -> {
-                        //입차를 기록
+                when(v[2]) {
+                    "IN" -> {
+                        //입차 시간 기록
                         inTime = convertTimeFormat(v[0])
                         if(index == record.lastIndex) {
-                         // 출차 정산
+                         // 총 이용 시간 계산
                             totalTime += convertTimeFormat("23:59")-convertTimeFormat(v[0])
                         }
                     }
-                    //출차
-                    else -> {
-                        //출차 정산
-                            totalTime += convertTimeFormat(v[0])-inTime    
-                    }
+                    "OUT" -> totalTime += convertTimeFormat(v[0])-inTime // 총 이용 시간 계산
+                    else -> {}
                 }
                 if(index == record.lastIndex) {
                     answer[answer.lastIndex]+=settleParkingFees(basicTime, basicFee, unitTime, unitFee, totalTime)
