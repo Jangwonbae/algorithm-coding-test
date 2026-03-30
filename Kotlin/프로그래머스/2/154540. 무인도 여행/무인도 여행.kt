@@ -2,51 +2,41 @@ import java.util.*
 import java.util.Queue
 class Solution {
     fun solution(maps: Array<String>): IntArray {
-        var answer: IntArray = intArrayOf()
+        val result = mutableListOf<Int>()
         
         val rows = maps.size
         val columns = maps[0].length
-        
+    
         val visited = Array(rows){BooleanArray(columns)}
         
+        val dx = intArrayOf(-1, 1, 0, 0)
+        val dy = intArrayOf(0, 0, -1, 1)
+                    
         for(row in 0 until rows) {
             for(column in 0 until columns) {
-                
                 if(maps[row][column] != 'X' && !visited[row][column]) {
                     var sum = 0
                     val queue : Queue<IntArray> = LinkedList()
+                    
                     queue.add(intArrayOf(row, column))
                     visited[row][column] = true
                     while(queue.isNotEmpty()) {
-                        var (x, y) = queue.poll()
-                        sum += (maps[x][y]-'0')
-                        if(x-1 >= 0 && maps[x-1][y] != 'X' && !visited[x-1][y]) {
-                            visited[x-1][y] = true
-                            queue.add(intArrayOf(x-1, y))
+                        val (x, y) = queue.poll()
+                        sum += maps[x][y].digitToInt()
+                        for(i in 0..3) {
+                            val nx = x + dx[i]
+                            val ny = y + dy[i]
+                            if(nx in 0 until rows && ny in 0 until columns &&
+                                maps[nx][ny] != 'X' && !visited[nx][ny]) {
+                                visited[nx][ny] = true
+                                queue.add(intArrayOf(nx, ny))
+                            }
                         }
-                        if(x+1 < rows && maps[x+1][y] != 'X' && !visited[x+1][y]) {
-                            visited[x+1][y] = true
-                            queue.add(intArrayOf(x+1, y))
-                        }
-                        if(y-1 >= 0 && maps[x][y-1] != 'X' && !visited[x][y-1]) {
-                            visited[x][y-1] = true
-                            queue.add(intArrayOf(x, y-1))
-                        }
-                        if(y+1 < columns && maps[x][y+1] != 'X' && !visited[x][y+1]) {
-                            visited[x][y+1] = true
-                            queue.add(intArrayOf(x, y+1))
-                        }
-                    
                     }
-                    answer += sum
-                    sum = 0
+                    result.add(sum)
                 }
             }
         }
-        if(answer.isEmpty()) {
-            return intArrayOf(-1)
-        } else {
-            return answer.sorted().toIntArray()
-        }
+        return if (result.isEmpty()) intArrayOf(-1) else result.sorted().toIntArray()
     }
 }
